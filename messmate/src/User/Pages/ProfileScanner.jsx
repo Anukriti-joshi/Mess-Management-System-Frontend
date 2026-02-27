@@ -53,6 +53,8 @@ const ProfileScanner = () => {
   }, []);
 
   useEffect(() => {
+    if (!plan) return;
+
     const generateQrCode = async () => {
       const dataObject = JSON.stringify({
         userId: auth.userId,
@@ -74,7 +76,7 @@ const ProfileScanner = () => {
     };
 
     generateQrCode();
-  });
+  }, [plan, auth]);
 
   return (
     <div className="profilescanner m-auto flex items-center justify-center  h-[40rem]">
