@@ -8,7 +8,7 @@ const useRefresh = () => {
 
         // refresh backend side
         const response = await axiosPrivate.get("/auth/refresh" , {
-            withCredntials:true
+            withCredentials: true
         })
         setAuth(prev => {
                 return {...prev ,"userId":response.data.userId,"name":response.data.name,"email":response.data.email ,"mobileno":response.data.mobileno, "role":response.data.role, "accessToken":response.data.accessToken}
