@@ -4,14 +4,15 @@ import Mainbar from "./Components/Mainbar";
 
 const Employee = () => {
   return (
-    <div>
-      <main main className="flex position-relative gap-[1rem]">
-        <div className="flex-[2]">
-          <Sidebar />
-        </div>
-        <div className=" mt-3 flex-[9] mr-[0.2rem]">
-          <Mainbar />
-        </div>
+    <div className="h-screen w-screen overflow-hidden flex">
+      {/* Fixed Sidebar */}
+      <aside className="h-screen flex-shrink-0 overflow-y-auto">
+        <Sidebar />
+      </aside>
+
+      {/* Scrollable Main Content */}
+      <main className="flex-1 h-screen overflow-y-auto overflow-x-hidden bg-gray-100 p-4">
+        <Mainbar />
       </main>
     </div>
   );

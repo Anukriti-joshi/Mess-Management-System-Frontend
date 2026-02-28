@@ -7,22 +7,15 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Label,
   Pie,
   PieChart,
-  Sector,
   Cell,
-  LineChart,
-  Legend,
-  Line,
 } from "recharts";
 
 import axios from "../../Api/axios";
 
 function Dashboad() {
   const COLORS = ["#005298", "#004e40", "#ff0000"];
-  const color = "#009d7f";
-  const color1 = "#005298";
   const COLORS1 = ["#005298", "#004e40", "#ff0000", "#cc8400", "#964b00"];
   const [data, setData] = useState(null);
   const [data1, setData1] = useState([]);
@@ -30,307 +23,219 @@ function Dashboad() {
   const [data3, setData3] = useState([]);
 
   useEffect(() => {
-    const getData = async (e) => {
-      // if button enabled with JS hack
+    const getData = async () => {
       try {
         const response = await axios.get("/stats/getDayMember", {
           withCredentials: true,
         });
-
         setData(response.data);
-      } catch (err) {
-      }
+      } catch (err) {}
     };
-
     getData();
   }, []);
+
   useEffect(() => {
-    const getData = async (e) => {
-      // if button enabled with JS hack
+    const getData = async () => {
       try {
         const response = await axios.get("/stats/getPlanCount", {
           withCredentials: true,
         });
-
         setData1(response.data);
-      } catch (err) {
-      }
+      } catch (err) {}
     };
-
     getData();
   }, []);
+
   useEffect(() => {
-    const getData = async (e) => {
-      // if button enabled with JS hack
+    const getData = async () => {
       try {
         const response = await axios.get("/stats/getMonthlyExpenses", {
           withCredentials: true,
         });
-
         setData3(response.data);
-      } catch (err) {
-      }
+      } catch (err) {}
     };
-
     getData();
   }, []);
+
   useEffect(() => {
-    const getData = async (e) => {
-      // if button enabled with JS hack
+    const getData = async () => {
       try {
         const response = await axios.get("/stats/getWeekProfit", {
           withCredentials: true,
         });
-
         setData2(response.data);
-      } catch (err) {
-      }
+      } catch (err) {}
     };
-
     getData();
   }, []);
+
   return (
-    <div className="mainbar ">
-      <div className="m-main">
-        <div className="m-title">
-          <span className="text-[2rem] text-[#009d7f] h2 border-b-2 border-black pb-2 text-center">
-            DASHBOARD
-          </span>
-        </div>
-        <div className="flex items-center gap-[1rem]">
-          <div className="card-container ">
-            <div className="piecard bg-gray-200 w-[37rem] shadow-xl h-[20rem] flex items-center mt-[1.5rem] rounded-[1rem] justify-around">
-              <div className="p-content flex flex-col gap-[1rem]">
-                {/* <Time color="white" /> */}
-                <span>Plan Distribution</span>
-                <div className="flex gap-[0.5rem] items-center">
-                  <div className="w-5 h-5 bg-[#ff0000] rounded-full"></div>
-                  <span>Daily</span>
-                </div>
-                <div className="flex gap-[0.5rem] items-center">
-                  <div className="w-5 h-5 bg-[#004e40] rounded-full"></div>
-                  <span>Weekly</span>
-                </div>
-                <div className="flex gap-[0.5rem] items-center">
-                  <div className="w-5 h-5 bg-[#005298] rounded-full"></div>
-                  <span>Monthly</span>
-                </div>
-              </div>
-              <div className="">
-                <PieChart width={300} height={500}>
-                  <Pie
-                    data={data1}
-                    cx={150}
-                    cy={250}
-                    innerRadius={50}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    paddingAngle={5}
-                    dataKey="count"
-                    label
-                  >
-                    {data1.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </div>
-            </div>
-            {/* <Piecard /> */}
-            {/* <Piecard /> */}
-          </div>
-          <div className="card-container ">
-            <div className="piecard bg-gray-200  shadow-xl w-[37rem] h-[20rem] flex items-center mt-[1.5rem] rounded-[1rem] justify-around">
-              <div className="p-content flex flex-col gap-[1rem]">
-                {/* <Time color="white" /> */}
-                <span>Expenditure</span>
+    <div className="w-full">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-teal-600 border-b-2 border-gray-300 pb-2">
+          DASHBOARD
+        </h1>
+      </div>
 
-                <div className="flex gap-[0.5rem] items-center">
-                  <div className="w-5 h-5 bg-[#964b00] rounded-full"></div>
-                  <span>Vegetables</span>
-                </div>
-                <div className="flex gap-[0.5rem] items-center">
-                  <div className="w-5 h-5 rounded-full"></div>
-                  <span>Vessels</span>
-                </div>
-                <div className="flex gap-[0.5rem] items-center">
-                  <div className="w-5 h-5 bg-[#005298] rounded-full"></div>
-                  <span>Liquid</span>
-                </div>
-                <div className="flex gap-[0.5rem] items-center">
-                  <div className="w-5 h-5 bg-[#cc8400] rounded-full"></div>
-                  <span>Essentials</span>
-                </div>
-                <div className="flex gap-[0.5rem] items-center">
-                  <div className="w-5 h-5 bg-[#ff0000] rounded-full"></div>
-                  <span>Miscellaneous</span>
-                </div>
-              </div>
-              <div className="">
-                <PieChart width={300} height={500}>
-                  <Pie
-                    data={data3}
-                    cx={150}
-                    cy={250}
-                    innerRadius={50}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    paddingAngle={5}
-                    dataKey="expense"
-                    label
-                  >
-                    {data3.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS1[index % COLORS1.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </div>
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        {/* Pie Chart 1 - Plan Distribution */}
+        <div className="bg-white shadow-lg rounded-xl p-4 flex flex-col sm:flex-row items-center justify-around min-h-[280px]">
+          <div className="flex flex-col gap-3">
+            <span className="font-semibold text-lg">Plan Distribution</span>
+            <div className="flex gap-2 items-center">
+              <div className="w-4 h-4 bg-[#ff0000] rounded-full"></div>
+              <span className="text-sm">Daily</span>
             </div>
-            {/* <Piecard /> */}
-            {/* <Piecard /> */}
+            <div className="flex gap-2 items-center">
+              <div className="w-4 h-4 bg-[#004e40] rounded-full"></div>
+              <span className="text-sm">Weekly</span>
+            </div>
+            <div className="flex gap-2 items-center">
+              <div className="w-4 h-4 bg-[#005298] rounded-full"></div>
+              <span className="text-sm">Monthly</span>
+            </div>
+          </div>
+          <div className="w-[200px] h-[200px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={data1}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={40}
+                  outerRadius={70}
+                  fill="#8884d8"
+                  paddingAngle={5}
+                  dataKey="count"
+                  label
+                >
+                  {data1.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="flex items-center gap-[1rem]">
-          <div className="card-container ">
-            <div className="piecard bg-gray-200 shadow-xl w-[37rem] h-[20rem] pt-[5rem] px-[1rem] flex items-center mt-[1.5rem] rounded-[1rem] justify-around">
-              <ResponsiveContainer width="100%" height="100%" aspect={3}>
-                <AreaChart
-                  className=""
-                  data={data2}
-                  stroke="black"
-                  idth={500}
-                  height={500}
-                  margin={{ top: 10, right: 30, left: 5, bottom: 0 }}
-                >
-                  <defs>
-                    <linearGradient
-                      id={`color${color}`}
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop
-                        offset="0%"
-                        stopColor={color}
-                        stopOpacity={4}
-                      ></stop>
-                      <stop
-                        offset="75%"
-                        stopColor={color}
-                        stopOpacity={0.25}
-                      ></stop>
-                    </linearGradient>
-                  </defs>
-                  <XAxis
-                    className=""
-                    dataKey="date"
-                    label={{
-                      value: "Date",
-                      // position: "bottom",
-                      offset: 5,
-                      margin: 3,
-                    }}
-                  />
-                  <YAxis
-                    label={{
-                      value: "Profit",
-                      angle: -90,
-                      position: "insideLeft",
-                    }}
-                  />
-                  <CartesianGrid strokeDasharray="5 5" />
-                  <Tooltip />
-                  <Area
-                    type="monotone"
-                    dataKey="amount"
-                    stroke="#5F0A87s"
-                    fillOpacity={1}
-                    fill={`url(#color${color})`}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
+        {/* Pie Chart 2 - Expenditure */}
+        <div className="bg-white shadow-lg rounded-xl p-4 flex flex-col sm:flex-row items-center justify-around min-h-[280px]">
+          <div className="flex flex-col gap-2">
+            <span className="font-semibold text-lg">Expenditure</span>
+            <div className="flex gap-2 items-center">
+              <div className="w-4 h-4 bg-[#964b00] rounded-full"></div>
+              <span className="text-sm">Vegetables</span>
+            </div>
+            <div className="flex gap-2 items-center">
+              <div className="w-4 h-4 bg-gray-400 rounded-full"></div>
+              <span className="text-sm">Vessels</span>
+            </div>
+            <div className="flex gap-2 items-center">
+              <div className="w-4 h-4 bg-[#005298] rounded-full"></div>
+              <span className="text-sm">Liquid</span>
+            </div>
+            <div className="flex gap-2 items-center">
+              <div className="w-4 h-4 bg-[#cc8400] rounded-full"></div>
+              <span className="text-sm">Essentials</span>
+            </div>
+            <div className="flex gap-2 items-center">
+              <div className="w-4 h-4 bg-[#ff0000] rounded-full"></div>
+              <span className="text-sm">Miscellaneous</span>
             </div>
           </div>
-          <div className="card-container ">
-            <div className="piecard bg-gray-200 shadow-xl w-[37rem] h-[20rem] pt-[5rem] px-[1rem] flex items-center mt-[1.5rem] rounded-[1rem] justify-around">
-              <ResponsiveContainer width="100%" aspect={3}>
-                <AreaChart
-                  className=""
-                  data={data}
-                  stroke="black"
-                  margin={{ top: 30, right: 30, left: 5, bottom: 0 }}
+          <div className="w-[200px] h-[200px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={data3}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={40}
+                  outerRadius={70}
+                  fill="#8884d8"
+                  paddingAngle={5}
+                  dataKey="expense"
+                  label
                 >
-                  <defs>
-                    <linearGradient
-                      id={`color${color1}`}
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop
-                        offset="0%"
-                        stopColor={color1}
-                        stopOpacity={4}
-                      ></stop>
-                      <stop
-                        offset="75%"
-                        stopColor={color1}
-                        stopOpacity={0.25}
-                      ></stop>
-                    </linearGradient>
-                  </defs>
-                  <XAxis
-                    className=""
-                    dataKey="date"
-                    label={{
-                      value: "Date",
-                      // position: "bottom",
-                      offset: 10,
-                      margin: 10,
-                    }}
-                  />
-                  <YAxis
-                    label={{
-                      value: "Student no.",
-                      angle: -90,
-                      position: "insideLeft",
-                    }}
-                  />
-                  <CartesianGrid strokeDasharray="5 5" />
-                  {/* <CartesianGrid strokeDasharray="3 3" /> */}
-                  <Tooltip />
-                  <Area
-                    type="monotone"
-                    dataKey="value"
-                    stroke="#5F0A87s"
-                    fillOpacity={1}
-                    // fill="url(#colorPv)"
-
-                    activeDot={{ r: 8 }}
-                    fill={`url(#color${color1})`}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
+                  {data3.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS1[index % COLORS1.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
+        </div>
 
-          {/* <Piecard /> */}
-          {/* <Piecard /> */}
+        {/* Area Chart 1 - Profit */}
+        <div className="bg-white shadow-lg rounded-xl p-4 min-h-[280px]">
+          <h3 className="font-semibold mb-2">Weekly Profit</h3>
+          <ResponsiveContainer width="100%" height={220}>
+            <AreaChart
+              data={data2}
+              margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#009d7f" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#009d7f" stopOpacity={0.1} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+              <YAxis tick={{ fontSize: 12 }} />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Area
+                type="monotone"
+                dataKey="amount"
+                stroke="#009d7f"
+                fillOpacity={1}
+                fill="url(#colorProfit)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Area Chart 2 - Student Count */}
+        <div className="bg-white shadow-lg rounded-xl p-4 min-h-[280px]">
+          <h3 className="font-semibold mb-2">Daily Student Count</h3>
+          <ResponsiveContainer width="100%" height={220}>
+            <AreaChart
+              data={data}
+              margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id="colorStudent" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#005298" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#005298" stopOpacity={0.1} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+              <YAxis tick={{ fontSize: 12 }} />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke="#005298"
+                fillOpacity={1}
+                fill="url(#colorStudent)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>
-    // </div>
   );
 }
 

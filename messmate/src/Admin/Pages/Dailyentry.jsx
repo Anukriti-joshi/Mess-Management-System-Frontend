@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "../../Api/axios";
-import EditModal from "./EditModal";
-import dayjs from "dayjs";
+import React, { useState } from "react";
 import AllPlanTable from "./AllPlanTable";
 import TodayStudent from "./TodayStudent";
 
@@ -9,33 +6,35 @@ const Dailyentry = () => {
   const [isSetAll, setIsSetAll] = useState(true);
 
   return (
-    <div className="relative overflow-x-auto flex flex-col gap-[2rem] shadow-md sm:rounded-lg">
-      <div className="flex items-center justify-center w-full p-3 gap-[4rem] ">
-        <div className="flex gap-3 items-center justify-center">
+    <div className="bg-white rounded-lg shadow-md">
+      {/* Tab Header */}
+      <div className="flex items-center justify-center gap-8 p-4 border-b bg-gray-50 rounded-t-lg">
+        <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="radio"
-            id="html"
-            name="fav_language"
-            value="Menu Add"
-            defaultChecked
+            name="tab_selection"
+            checked={isSetAll}
             onChange={() => setIsSetAll(true)}
+            className="w-4 h-4 text-blue-600"
           />
-          <label className="text-[1.3rem]">All Plan</label>
-        </div>
-        <div className="flex gap-3 items-center justify-center">
+          <span className="text-lg font-medium">All Plans</span>
+        </label>
+        <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="radio"
-            id="css"
-            name="fav_language"
-            value="Subscription Add"
+            name="tab_selection"
+            checked={!isSetAll}
             onChange={() => setIsSetAll(false)}
+            className="w-4 h-4 text-blue-600"
           />
-          <label className="text-[1.3rem]">Today Students</label>
-        </div>
+          <span className="text-lg font-medium">Today's Students</span>
+        </label>
       </div>
-      <hr />
 
-      {isSetAll ? <AllPlanTable /> : <TodayStudent />}
+      {/* Content */}
+      <div className="p-4">
+        {isSetAll ? <AllPlanTable /> : <TodayStudent />}
+      </div>
     </div>
   );
 };

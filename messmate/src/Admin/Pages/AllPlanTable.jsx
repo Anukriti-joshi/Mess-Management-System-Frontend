@@ -8,7 +8,7 @@ const AllPlanTable = () => {
   const [alert, setAlert] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
-  const row = 5;
+  const row = 20;
   const totalpages = Math.ceil(users.length / row);
   const [startingindex, setstartingindex] = useState(0);
 
@@ -56,14 +56,20 @@ const AllPlanTable = () => {
     }
   };
 
-  const content = users
-    .filter((item, i) => {
-      return item.userId.toString().includes(search) ||
-        item.planId.toString().includes(search) ||
-        item.fee_status
-        ? "paid".includes(search)
-        : "none".includes(search);
-    })
+  // Filter users based on search
+  const filteredUsers = users.filter((item) => {
+    if (!search) return true;
+    const searchLower = search.toLowerCase();
+    return (
+      item.userId.toString().includes(search) ||
+      item.planId.toString().includes(search) ||
+      (item.fee_status ? "paid" : "unpaid").includes(searchLower)
+    );
+  });
+
+  const filteredTotalPages = Math.ceil(filteredUsers.length / row);
+
+  const content = filteredUsers
     .slice(startingindex, startingindex + row)
     .map((user) => {
       return (
@@ -126,23 +132,29 @@ const AllPlanTable = () => {
       );
     });
 
-  const pagesArray = Array(totalpages)
-    .fill()
-    .map((index, i) => {
-      return (
-        <button
-          className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"
-          onClick={() => {
-            setPage(i);
-            setstartingindex(i * row);
-          }}
-        >
-          {i}
-        </button>
-      );
-    });
+  const handlePrevPage = () => {
+    if (page > 0) {
+      setPage(page - 1);
+      setstartingindex((page - 1) * row);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (page < filteredTotalPages - 1) {
+      setPage(page + 1);
+      setstartingindex((page + 1) * row);
+    }
+  };
+
+  // Reset page when search changes
+  const handleSearch = (value) => {
+    setSearch(value);
+    setPage(0);
+    setstartingindex(0);
+  };
+
   return (
-    <div>
+    <div className="w-full">
       <div className="flex items-center justify-end  pb-4 bg-white dark:bg-gray-900">
         <label htmlFor="table-search" className="sr-only">
           Search
@@ -166,86 +178,63 @@ const AllPlanTable = () => {
           <input
             type="text"
             id="table-search-users"
-            className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search for users"
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
+            className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Search by UserID, PlanID, or status"
+            onChange={(e) => handleSearch(e.target.value)}
             value={search}
           />
         </div>
       </div>
 
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-white uppercase bg-dark dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" className="px-6 py-3">
-              UserId
-            </th>
-            <th scope="col" className="px-6 py-3">
-              PlanID
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Start Date
-            </th>
-            <th scope="col" className="px-6 py-3">
-              End Date
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Fee Status
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Fee Pay
-            </th>
-          </tr>
-        </thead>
+      <div className="max-h-[60vh] overflow-y-auto">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 table-fixed">
+          <thead className="text-xs text-white uppercase bg-dark dark:bg-gray-700 dark:text-gray-400 sticky top-0">
+            <tr>
+              <th scope="col" className="px-4 py-3 w-[15%]">
+                UserId
+              </th>
+              <th scope="col" className="px-4 py-3 w-[15%]">
+                PlanID
+              </th>
+              <th scope="col" className="px-4 py-3 w-[20%]">
+                Start Date
+              </th>
+              <th scope="col" className="px-4 py-3 w-[20%]">
+                End Date
+              </th>
+              <th scope="col" className="px-4 py-3 w-[15%]">
+                Fee Status
+              </th>
+              <th scope="col" className="px-4 py-3 w-[15%]">
+                Fee Pay
+              </th>
+            </tr>
+          </thead>
 
-        <tbody>{content}</tbody>
-      </table>
-      <div className="flex mt-2 mb-2 ">
-        <nav
-          className="isolate m-auto min-h-[40px]  inline-flex mb-5 flex-space-x-px rounded-md shadow-sm"
-          aria-label="Pagination"
-        >
-          <button
-            onClick={() => setPage(page - 1)}
-            className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-          >
-            <span className="sr-only">Previous</span>
-            <svg
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-          {pagesArray}
+          <tbody>{content}</tbody>
+        </table>
+      </div>
 
+      <div className="flex items-center justify-between mt-4 mb-4 px-4 bg-white py-3 rounded-b-lg">
+        <span className="text-sm text-gray-700">
+          Page {page + 1} of {filteredTotalPages || 1} ({filteredUsers.length} entries{search && ` found`})
+        </span>
+        <div className="flex gap-2">
           <button
-            onClick={() => setPage(page + 1)}
-            className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+            onClick={handlePrevPage}
+            disabled={page === 0}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span className="sr-only">Next</span>
-            <svg
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                clipRule="evenodd"
-              />
-            </svg>
+            Previous
           </button>
-        </nav>
+          <button
+            onClick={handleNextPage}
+            disabled={page >= filteredTotalPages - 1}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
